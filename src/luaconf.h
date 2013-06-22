@@ -9,15 +9,19 @@
 #define lconfig_h
 
 #include <limits.h>
+#include <math.h>
 #include <stddef.h>
 
+
+#define __STRICT_ANSI__
+#define LUA_USE_POSIX
+#define LUA_ANSI
 
 /*
 ** ==================================================================
 ** Search for "@@" to find all configurable definitions.
 ** ===================================================================
 */
-
 
 /*
 @@ LUA_ANSI controls the use of non-ansi features.
@@ -369,7 +373,7 @@
 @@ LUAL_BUFFERSIZE is the buffer size used by the lauxlib buffer system.
 ** CHANGE it if it uses too much C-stack space.
 */
-#define LUAL_BUFFERSIZE		BUFSIZ
+#define LUAL_BUFFERSIZE		4096
 
 
 
@@ -432,7 +436,6 @@
 
 /* the following operations need the math library */
 #if defined(lobject_c) || defined(lvm_c)
-#include <math.h>
 #define luai_nummod(L,a,b)	((a) - l_mathop(floor)((a)/(b))*(b))
 #define luai_numpow(L,a,b)	(l_mathop(pow)(a,b))
 #endif
@@ -544,7 +547,6 @@
 ** Local configuration. You can use this space to add your redefinitions
 ** without modifying the main part of the file.
 */
-
 
 
 #endif

@@ -7,6 +7,7 @@
 
 #include <stddef.h>
 #include <string.h>
+#include <time.h>
 
 #define lstate_c
 #define LUA_CORE
@@ -19,6 +20,7 @@
 #include "lfunc.h"
 #include "lgc.h"
 #include "llex.h"
+#include "llimits.h"
 #include "lmem.h"
 #include "lstate.h"
 #include "lstring.h"
@@ -43,23 +45,13 @@
 
 
 /*
-** a macro to help the creation of a unique random seed when a state is
-** created; the seed is used to randomize hashes.
-*/
-#if !defined(luai_makeseed)
-#include <time.h>
-#define luai_makeseed()		cast(unsigned int, time(NULL))
-#endif
-
-
-
-/*
 ** thread state + extra space
 */
 typedef struct LX {
 #if defined(LUAI_EXTRASPACE)
   char buff[LUAI_EXTRASPACE];
 #endif
+	char junko[4];
   lua_State l;
 } LX;
 
@@ -74,6 +66,7 @@ typedef struct LG {
 
 
 
+
 #define fromstate(L)	(cast(LX *, cast(lu_byte *, (L)) - offsetof(LX, l)))
 
 
@@ -83,18 +76,28 @@ typedef struct LG {
 ** randomness..
 */
 #define addbuff(b,p,e) \
-  { size_t t = cast(size_t, e); \
-    memcpy(buff + p, &t, sizeof(t)); p += sizeof(t); }
+  { size_t t = cast(size_t, e);  memcpy(buff + p, &t, sizeof(t)); p += sizeof(t); }
+
+
+/*
+** a macro to help the creation of a unique random seed when a state is
+** created; the seed is used to randomize hashes.
+*/
+#if !defined(luai_makeseed)
+#define luai_makeseed()		((unsigned int)(time(NULL)))
+#endif
+
 
 static unsigned int makeseed (lua_State *L) {
-  char buff[4 * sizeof(size_t)];
+
+  char buff[4 * sizeof(size_t) ];
   unsigned int h = luai_makeseed();
   int p = 0;
   addbuff(buff, p, L);  /* heap variable */
   addbuff(buff, p, &h);  /* local variable */
   addbuff(buff, p, luaO_nilobject);  /* global variable */
   addbuff(buff, p, &lua_newstate);  /* public function */
-  lua_assert(p == sizeof(buff));
+  lua_assert(p ==  sizeof(buff ) );
   return luaS_hash(buff, p, h);
 }
 
@@ -219,14 +222,19 @@ static void preinit_state (lua_State *L, global_State *g) {
 
 
 static void close_state (lua_State *L) {
+  size_t abba = sizeof(LG);
   global_State *g = G(L);
   luaF_close(L, L->stack);  /* close all upvalues for this thread */
   luaC_freeallobjects(L);  /* collect all objects */
   luaM_freearray(L, G(L)->strt.hash, G(L)->strt.size);
   luaZ_freebuffer(L, &g->buff);
   freestack(L);
-  lua_assert(gettotalbytes(g) == sizeof(LG));
-  (*g->frealloc)(g->ud, fromstate(L), sizeof(LG), 0);  /* free main block */
+
+  lua_assert(gettotalbytes(g) == abba);
+
+  (*g->frealloc)(g->ud, fromstate(L), abba, 0);  /* free main block */
+
+
 }
 
 

@@ -151,7 +151,7 @@ typedef struct global_State {
 /*
 ** `per thread' state
 */
-struct lua_State {
+typedef struct lua_State {
   CommonHeader;
   lu_byte status;
   StkId top;  /* first free slot in the stack */
@@ -173,10 +173,10 @@ struct lua_State {
   struct lua_longjmp *errorJmp;  /* current error recover point */
   ptrdiff_t errfunc;  /* current error handling function (stack index) */
   CallInfo base_ci;  /* CallInfo for first level (C calling Lua) */
-};
+} lua_State;
 
 
-#define G(L)	(L->l_G)
+#define G(x)	((x)->l_G)
 
 
 /*
