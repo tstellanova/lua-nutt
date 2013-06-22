@@ -63,8 +63,13 @@
 
 #else
 /* default handling with long jumps */
-#define LUAI_THROW(L,c)		longjmp((c)->b, 1)
-#define LUAI_TRY(L,c,a)		if (setjmp((c)->b) == 0) { a }
+
+//TODO setjmp and longjmp don't exist in thumb?
+// #define LUAI_THROW(L,c)		longjmp((c)->b, 1)
+// #define LUAI_TRY(L,c,a)		if (setjmp((c)->b) == 0) { a }
+#define LUAI_THROW(L,c)		lua_assert(false)
+#define LUAI_TRY(L,c,a)		{ a }
+
 #define luai_jmpbuf		jmp_buf
 
 #endif

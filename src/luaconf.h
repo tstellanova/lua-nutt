@@ -14,7 +14,7 @@
 
 
 #define __STRICT_ANSI__
-#define LUA_USE_POSIX
+// #define LUA_USE_POSIX
 #define LUA_ANSI
 
 /*
@@ -190,6 +190,13 @@
 #define LUAI_DDEF	/* empty */
 #endif				/* } */
 
+//undefined stdio stuff
+
+#define _IOFBF 0
+#define _IOLBF 1
+#define _IONBF 2
+
+#define RAND_MAX MAX_RAND
 
 
 /*
