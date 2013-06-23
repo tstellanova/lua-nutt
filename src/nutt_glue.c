@@ -28,3 +28,11 @@ void nutt_dbgmsg2(const char *s1, const char *s2)
 	// fflush(stderr);
 }
 
+int nutt_exec_system(const char *aCmd)
+{
+	//TODO split into argv etc
+	nutt_dbgmsg2("nutt_exec_system",aCmd);
+	int ret = exec_builtin(aCmd, (FAR const char **)NULL, NULL, 0);
+
+	return 0;
+}

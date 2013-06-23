@@ -199,8 +199,7 @@
 
 #define RAND_MAX MAX_RAND
 
-
-
+#define EXEC_SYSTEM(a) nutt_exec_system(a)
 
 
 /*

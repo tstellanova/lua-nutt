@@ -52,9 +52,10 @@
         e = (e == -1); }
 
 #elif !defined(lua_tmpnam)
-
-#define LUA_TMPNAMBUFSIZE	L_tmpnam
-#define lua_tmpnam(b,e)		{ e = (tmpnam(b) == NULL); }
+// #define LUA_TMPNAMBUFSIZE	L_tmpnam
+// #define lua_tmpnam(b,e)		{ e = (tmpnam(b) == NULL); }
+#define LUA_TMPNAMBUFSIZE	32
+#define lua_tmpnam(b,e)	
 
 #endif
 
@@ -79,7 +80,10 @@
 
 static int os_execute (lua_State *L) {
   const char *cmd = luaL_optstring(L, 1, NULL);
-  int stat = system(cmd);
+
+ // int stat = system(cmd);
+ int stat = EXEC_SYSTEM(cmd);
+
   if (cmd != NULL)
     return luaL_execresult(L, stat);
   else {
@@ -91,7 +95,9 @@ static int os_execute (lua_State *L) {
 
 static int os_remove (lua_State *L) {
   const char *filename = luaL_checkstring(L, 1);
-  return luaL_fileresult(L, remove(filename) == 0, filename);
+//TODO  return luaL_fileresult(L, remove(filename) == 0, filename);
+
+return 0;
 }
 
 
@@ -120,7 +126,7 @@ static int os_getenv (lua_State *L) {
 
 
 static int os_clock (lua_State *L) {
-  lua_pushnumber(L, ((lua_Number)clock())/(lua_Number)CLOCKS_PER_SEC);
+  // lua_pushnumber(L, ((lua_Number)clock())/(lua_Number)CLOCKS_PER_SEC);
   return 1;
 }
 
@@ -266,8 +272,9 @@ static int os_time (lua_State *L) {
 
 
 static int os_difftime (lua_State *L) {
-  lua_pushnumber(L, difftime((time_t)(luaL_checknumber(L, 1)),
-                             (time_t)(luaL_optnumber(L, 2, 0))));
+	//TODO
+  // lua_pushnumber(L, difftime((time_t)(luaL_checknumber(L, 1)),
+  //                            (time_t)(luaL_optnumber(L, 2, 0))));
   return 1;
 }
 
@@ -281,7 +288,8 @@ static int os_setlocale (lua_State *L) {
      "numeric", "time", NULL};
   const char *l = luaL_optstring(L, 1, NULL);
   int op = luaL_checkoption(L, 2, "all", catnames);
-  lua_pushstring(L, setlocale(cat[op], l));
+//TODO
+  // lua_pushstring(L, setlocale(cat[op], l));
   return 1;
 }
 
