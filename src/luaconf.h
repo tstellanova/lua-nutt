@@ -16,6 +16,7 @@
 #define __STRICT_ANSI__
 // #define LUA_USE_POSIX
 #define LUA_ANSI
+// #define LUA_USE_READLINE	/* needs some extra libraries */
 
 /*
 ** ==================================================================
@@ -199,6 +200,9 @@
 #define RAND_MAX MAX_RAND
 
 
+
+
+
 /*
 @@ LUA_QL describes how error messages quote program elements.
 ** CHANGE it if you want a different appearance.
@@ -232,6 +236,8 @@
 */
 #define luai_writestringerror(s,p) \
 	(fprintf(stderr, (s), (p)), fflush(stderr))
+
+#define DBGMSG2(a,b) (fprintf(stderr,"%s : %s\n", (a), (b)), fflush(stderr) )
 
 
 /*
