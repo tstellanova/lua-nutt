@@ -974,6 +974,7 @@ LUA_API int lua_load (lua_State *L, lua_Reader reader, void *data,
                       const char *chunkname, const char *mode) {
   ZIO z;
   int status;
+DBGMSG2("lua_load","start");
   lua_lock(L);
   if (!chunkname) chunkname = "?";
   luaZ_init(L, &z, reader, data);
@@ -986,10 +987,13 @@ LUA_API int lua_load (lua_State *L, lua_Reader reader, void *data,
       const TValue *gt = luaH_getint(reg, LUA_RIDX_GLOBALS);
       /* set global table as 1st upvalue of 'f' (may be LUA_ENV) */
       setobj(L, f->upvals[0]->v, gt);
+	DBGMSG2("lua_load","call luaC_barrier");
       luaC_barrier(L, f->upvals[0], gt);
     }
   }
   lua_unlock(L);
+DBGMSG2("lua_load","done");
+
   return status;
 }
 

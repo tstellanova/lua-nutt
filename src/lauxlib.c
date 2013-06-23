@@ -685,6 +685,8 @@ static const char *getS (lua_State *L, void *ud, size_t *size) {
 LUALIB_API int luaL_loadbufferx (lua_State *L, const char *buff, size_t size,
                                  const char *name, const char *mode) {
   LoadS ls;
+DBGMSG2("luaL_loadbufferx","start");
+
   ls.s = buff;
   ls.size = size;
   return lua_load(L, getS, &ls, name, mode);
