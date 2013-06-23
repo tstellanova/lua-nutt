@@ -11,7 +11,7 @@
 #include <limits.h>
 #include <math.h>
 #include <stddef.h>
-
+#include "nutt_glue.h"
 
 #define __STRICT_ANSI__
 // #define LUA_USE_POSIX
@@ -237,7 +237,6 @@
 #define luai_writestringerror(s,p) \
 	(fprintf(stderr, (s), (p)), fflush(stderr))
 
-#define DBGMSG2(a,b) (fprintf(stderr,"%s : %s\n", (a), (b)), fflush(stderr) )
 
 
 /*

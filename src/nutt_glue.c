@@ -1,5 +1,6 @@
 
 #include <string.h> /* strlen() strcpy() size_t */
+#include <stdio.h>
 
 size_t strxfrm(char *dest, const char *src, size_t n)
 {
@@ -17,5 +18,13 @@ int strcoll(const char *s1, const char *s2)
     char t2[1 + strxfrm(0, s2, 0)];
     strxfrm(t2, s2, sizeof(t2));
     return strcmp(t1, t2);
+}
+
+void nutt_dbgmsg2(const char *s1, const char *s2)
+{
+	printf("%s : %s \n", s1,s2);
+	fflush(stdout);
+	// fprintf(stderr,"%s : %s\n", s1,s2);
+	// fflush(stderr);
 }
 
