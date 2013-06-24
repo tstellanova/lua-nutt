@@ -28,11 +28,30 @@ void nutt_dbgmsg2(const char *s1, const char *s2)
 	// fflush(stderr);
 }
 
-int nutt_exec_system(const char *aCmd)
+#define kMaxCmdLineArgs 64
+int nutt_exec_system(const char *cmdStr)
 {
-	//TODO split into argv etc
-	nutt_dbgmsg2("nutt_exec_system",aCmd);
-	int ret = exec_builtin(aCmd, (FAR const char **)NULL, NULL, 0);
+	nutt_dbgmsg2("nutt_exec_system",cmdStr);
+	const char *sep = " ";
+	int argc = 0;
+	char *argv[kMaxCmdLineArgs];
+	
+	//chop up cmdStr by spaces and store in argv array
+	char *pch = strtok(cmdStr, sep);
+	while ((NULL != pch) && (argc < kMaxCmdLineArgs)) {
+		argv[argc++] = pch;
+		pch = strtok(NULL, sep);
+	}
+		
+	char *cmd = argv[0];
+
+	nutt_dbgmsg2("nutt_exec_system",cmd);
+
+	// exec_builtin(FAR const char *appname, FAR const char **argv,
+	//                         FAR const char *redirfile, int oflags)
+	
+	//TODO handle redirection etc??
+	int ret = exec_builtin(cmd, (FAR const char **)&argv, NULL, 0);
 
 	return 0;
 }

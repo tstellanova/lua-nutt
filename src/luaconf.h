@@ -199,6 +199,8 @@
 
 #define RAND_MAX MAX_RAND
 
+//most non-nutt builds would wish to use the following:
+//#define EXEC_SYSTEM(a) system(cmd);
 #define EXEC_SYSTEM(a) nutt_exec_system(a)
 
 
